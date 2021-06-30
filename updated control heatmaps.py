@@ -9,7 +9,7 @@ import seaborn as sns
 col = list(range(2,118))
 correlationMatrix = np.zeros(shape = (12,12))
 row = 0
-
+ctrlList = []
 
 for i in [x for x in range(4,17) if x != 10]:
     file = f"ctrl{i}.txt"
@@ -35,7 +35,8 @@ for i in [x for x in range(4,17) if x != 10]:
             correlationMatrix[row,column] = aa
         column = column + 1
     row = row + 1
-sns.heatmap(correlationMatrix, square=True)
+    ctrlList.append(i)
+sns.heatmap(correlationMatrix, square=True,xticklabels=(ctrlList),yticklabels=(ctrlList))
         
 """
 saveimg / save plots?
