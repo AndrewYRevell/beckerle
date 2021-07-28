@@ -10,21 +10,19 @@ import matplotlib.pyplot as plt
 import random
 
 col = list(range(2,118))
-row=0
-column=0
+ctrlList=[]
 nodesArray = []
-#correlationMatrix = np.zeros(shape = (25,116))
+
 for a in [x for x in range(4,17) if x != 10]:
+    ctrlList.append(a)
     file = f"ctrl{a}.txt"
-    
     C = np.loadtxt(file, skiprows=2, usecols = (col))
 #Preprocess connectivity matrices
 #log normalizing
     C[np.where(C == 0)] = 1
     C = np.log10(C)
     C = C/np.max(C)
-#sns.heatmap(C)
-
+#sns.heatmap(C) for connectivity matricies
 #Thresholding
     threshold = 0.97 #bottom X percent of edge weights are eliminated
     C_thresh = copy.deepcopy(C)
@@ -47,10 +45,7 @@ for a in [x for x in range(4,17) if x != 10]:
     activation_probability_threshold_distribution = np.zeros(shape = (time_steps, N))
 #%%
     for t in range(1, time_steps):
-        #print(t)
-        
         for i in range(N): #loop thru all nodes
-            
             #find neighbors of node i
             previous_state = node_state[t-1,i]
             activation_probability = random.betavariate(1.2, 1.2) #random.uniform(0, 1) #probability of being activated
@@ -69,21 +64,17 @@ for a in [x for x in range(4,17) if x != 10]:
         activation_probability_threshold_distribution[t,i] = activation_probability_threshold
     b=node_state[:,:]
     d=node_state.flatten() #time_steps x nodes (116)?
-    
-    
     nodesArray.append(d)
-    row=row+1
     #print(node_state[24,:])
     P = np.count_nonzero(node_state[24,:])
-    print(P/116)
+    print(P/116) #gives number of nodes active for each patient at t=24
 
 #print(nodesArray)
-f=np.array(nodesArray)
-print(f)
-aa = scipy.stats.spearmanr(f)
-print(aa)
-print(len(nodesArray))
+n = len(nodesArray)
+correlationArray=np.zeros((n,n))
+for x in range(n):
+    for y in range(n):
+        if y!= x:
+            correlationArray[x,y]=scipy.stats.spearmanr(nodesArray[x],nodesArray[y])[0]
 
-
-
-
+sns.heatmap(correlationArray, square=True,xticklabels=(ctrlList),yticklabels=(ctrlList))
