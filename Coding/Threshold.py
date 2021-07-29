@@ -12,9 +12,10 @@ import random
 
 col = list(range(2,118))
 nodesArray=[]
+ctrlList=[]
 for a in [x for x in range(4,17) if x != 10]:
+    ctrlList.append(a)
     file = f"ctrl{a}.txt"
-    
     C = np.loadtxt(file, skiprows=2, usecols = (col))
 #Preprocess connectivity matrices
 #log normalizing
@@ -60,15 +61,18 @@ for a in [x for x in range(4,17) if x != 10]:
                 node_state[t, i] = 1
             neighbor_sum_distribution[t,i] = neighbors_sum/strength
     b=node_state[:,:]
-    nodesArray.extend(b)
-    
-    
+    d=node_state.flatten() #time_steps x nodes (116)?
+    nodesArray.append(d)
     #print(node_state[24,:])
     P = np.count_nonzero(node_state[24,:])
     print(P/116)
 #print(nodesArray)
+n = len(nodesArray)
+correlationArray=np.zeros((n,n))
+for x in range(n):
+    for y in range(n):
+        if y!= x:
+            correlationArray[x,y]=scipy.stats.spearmanr(nodesArray[x],nodesArray[y])[0]
 
-#87/116=.75, observed range of activated nodes 64-89
-#print(node_state[24,:])
-
+sns.heatmap(correlationArray, square=True,xticklabels=(ctrlList),yticklabels=(ctrlList))
 
