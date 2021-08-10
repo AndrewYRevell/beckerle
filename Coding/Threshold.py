@@ -25,7 +25,7 @@ for a in [x for x in range(4,17) if x != 10]:
 #sns.heatmap(C)
 
 #Thresholding
-    threshold = .99 #bottom X percent of edge weights are eliminated
+    threshold = .4 #bottom X percent of edge weights are eliminated
     C_thresh = copy.deepcopy(C)
     number_positive_edges = len(np.where(C > 0)[0])
     cutoff = int(np.round(number_positive_edges*threshold))
@@ -36,8 +36,9 @@ for a in [x for x in range(4,17) if x != 10]:
 
 #Cascading
 #parameters
+    threshold=.2
     seed = 36 #ROI number where activity starts
-    time_steps = 25 #number of time steps before termination of simulation
+    time_steps = 3 #number of time steps before termination of simulation
     N = len(C_thresh) #number of nodes
     node_state = np.zeros(shape = (time_steps, N))
     node_state[0, seed] = 1 #make seed active
@@ -64,7 +65,7 @@ for a in [x for x in range(4,17) if x != 10]:
     d=node_state.flatten() #time_steps x nodes (116)?
     nodesArray.append(d)
     #print(node_state[24,:])
-    P = np.count_nonzero(node_state[24,:])
+    P = np.count_nonzero(node_state[2,:])
     print(P/116)
 #print(nodesArray)
 n = len(nodesArray)
