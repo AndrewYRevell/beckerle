@@ -34,7 +34,6 @@ for a in [x for x in range(4,17) if x != 10]:
     C_thresh[np.where(C_thresh < cutoff_threshold)] = 0
     len(np.where(C_thresh > 0)[0])
 
-#Cascading
 #parameters
     threshold=.2
     seed = 36 #ROI number where activity starts
