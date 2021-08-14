@@ -41,6 +41,7 @@ for a in [x for x in range(4,17) if x != 10]:
     node_state = np.zeros(shape = (time_steps, N))
     node_state[0, seed] = 1 #make seed active
     neighbor_sum_distribution = np.zeros(shape = (time_steps, N))
+    gradient=0
 
     for t in range(1, time_steps):
         
@@ -50,12 +51,12 @@ for a in [x for x in range(4,17) if x != 10]:
             neighbors = np.where(C_thresh[i,:] > 0)
             neighbors_weight = C_thresh[i,neighbors] 
             neighbors_state = node_state[t-1, neighbors]
-            neighbors_sum = np.sum(neighbors_weight * neighbors_state)
+            neighbors_sum = np.sum((neighbors_weight * neighbors_state) + gradient)
             strength = np.sum(neighbors_weight)
             g = np.count_nonzero(node_state[t,:])
             #print(g)
-            gradient=(g+t)*.01
-            if neighbors_sum+gradient >= threshold*strength: #if sum is greater than threshold, make that node active
+            gradient=gradient+.1
+            if neighbors_sum >= threshold*strength: #if sum is greater than threshold, make that node active
                 node_state[t, i] = 1
             if neighbors_sum+gradient < threshold*strength:
                 node_state[t, i] = 0
