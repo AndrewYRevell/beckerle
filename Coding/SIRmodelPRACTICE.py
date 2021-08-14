@@ -21,11 +21,19 @@ C = C/np.max(C)
 N = len(C) #number of nodes
 #sns.heatmap(C,square=True)
 
+#thresholding
+threshold = .4 #bottom X percent of edge weights are eliminated
+C_thresh = copy.deepcopy(C)
+number_positive_edges = len(np.where(C > 0)[0])
+cutoff = int(np.round(number_positive_edges*threshold))
+positive_edges = C[np.where(C > 0)]
+cutoff_threshold = np.sort(positive_edges)[cutoff]
+C_thresh[np.where(C_thresh < cutoff_threshold)] = 0
+len(np.where(C_thresh > 0)[0])
+
 #%% Parameters
-
-
-
-seed = 0 #ROI number where activity starts
+threshold=.02
+seed = 36 #ROI number where activity starts
 time_steps = 25 #number of time steps before termination of simulation
 node_state = np.zeros(shape = (time_steps, N))
 node_state[0, seed] = 1 #make seed active
@@ -67,53 +75,9 @@ print(node_state[0,:])
 print(node_state[1,:])
 print(node_state[2,:])
 print(node_state[3,:])
-sns.displot(neighbor_sum_distribution[1,:] ,binwidth=0.05); plt.xlim(-1, 1)
-sns.displot(neighbor_sum_distribution[2,:] ,binwidth=0.05); plt.xlim(-1, 1)
-sns.displot(neighbor_sum_distribution[3,:] ,binwidth=0.05); plt.xlim(-1, 1)
+#sns.displot(neighbor_sum_distribution[1,:] ,binwidth=0.05); plt.xlim(-1, 1)
+#sns.displot(neighbor_sum_distribution[2,:] ,binwidth=0.05); plt.xlim(-1, 1)
+#sns.displot(neighbor_sum_distribution[3,:] ,binwidth=0.05); plt.xlim(-1, 1)
 
 
 
-"""
-N # Total population, N.
-I0 = 1 #Initial Infected
-R0 = 0 #Initial Recovered
-S0 = N-I0-R0 #Susceptibility
-beta=np.mean(C) #probability of infection/contact rate
-gamma=.2 #mean recovery rate
-#%% 
-
-# A grid of time points (in days)
-t = np.linspace(0, 160, 160)
-
-# The SIR model differential equations.
-def deriv(y, t, N, beta, gamma):
-    S, I, R = y
-    dSdt = -beta * S * I / N
-    dIdt = beta * S * I / N - gamma * I
-    dRdt = gamma * I
-    return dSdt, dIdt, dRdt
-
-# Initial conditions vector
-y0 = S0, I0, R0
-# Integrate the SIR equations over the time grid, t.
-ret = odeint(deriv, y0, t, args=(N, beta, gamma))
-S, I, R = ret.T
-
-# Plot the data on three separate curves for S(t), I(t) and R(t)
-fig = plt.figure(facecolor='w')
-ax = fig.add_subplot(111, facecolor='#dddddd', axisbelow=True)
-ax.plot(t, S, 'b', alpha=0.5, lw=2, label='Susceptible')
-ax.plot(t, I, 'r', alpha=0.5, lw=2, label='Infected')
-ax.plot(t, R, 'g', alpha=0.5, lw=2, label='Recovered with immunity')
-ax.set_xlabel('Time')
-ax.set_ylabel('Number')
-ax.set_ylim(0,200)
-ax.yaxis.set_tick_params(length=0)
-ax.xaxis.set_tick_params(length=0)
-ax.grid(b=True, which='major', c='w', lw=2, ls='-')
-legend = ax.legend()
-legend.get_frame().set_alpha(0.5)
-for spine in ('top', 'right', 'bottom', 'left'):
-    ax.spines[spine].set_visible(False)
-plt.show()
-"""
