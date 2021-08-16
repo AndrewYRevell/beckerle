@@ -88,7 +88,6 @@ for a in PATList:
 
 
 #parameters
-    threshold = .02
     seed = 36 #ROI number where activity starts
     time_steps = 2 #number of time steps before termination of simulation
     N = len(C_thresh) #number of nodes
