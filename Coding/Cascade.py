@@ -24,7 +24,7 @@ for a in [x for x in range(4,17) if x != 10]:
     C = C/np.max(C)
 #sns.heatmap(C) for connectivity matricies
 #Thresholding
-    threshold = 0.97 #bottom X percent of edge weights are eliminated
+    threshold = 0.4 #bottom X percent of edge weights are eliminated
     C_thresh = copy.deepcopy(C)
     number_positive_edges = len(np.where(C > 0)[0])
     cutoff = int(np.round(number_positive_edges*threshold))
