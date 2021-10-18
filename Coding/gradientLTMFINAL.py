@@ -19,14 +19,14 @@ RIDList=[]
 
 #%% Controls
 for a in [x for x in range(4,17) if x != 10]:
-    """
+    
     side=np.random.choice(choiceArray)
     print(side)
     if side=="R":
        seed=37 #ROI number where activity starts
     if side=="L":
         seed=36
-    """
+    
     ctrlList.append(a)
     file = f"ctrl{a}.txt"
     C = np.loadtxt(file, skiprows=2, usecols = (col))
@@ -50,7 +50,7 @@ for a in [x for x in range(4,17) if x != 10]:
 #parameters
     threshold = .02
     gradient=.001
-    seed = 41 #ROI number where activity starts
+    #seed = 36 #ROI number where activity starts
     time_steps = 4 #number of time steps before termination of simulation
     N = len(C_thresh) #number of nodes
     node_state = np.zeros(shape = (time_steps, N))
@@ -81,7 +81,7 @@ for a in [x for x in range(4,17) if x != 10]:
     P = np.count_nonzero(node_state[time_steps-1,:])
     print(P/116)
     #print(nodesArray)
-"""
+
 
 #%%  Patients
 MTLList=[89,320,341,341,365,490,508,522,595,596] 
@@ -151,7 +151,7 @@ for a in RIDList:
     P = np.count_nonzero(node_state[time_steps-1,:])
     print(P/116)
     #print(nodesArray)
-"""
+
 #%% Activation Correlation Matrixing
 n = len(nodesArray)
 correlationArray=np.zeros((n,n))
