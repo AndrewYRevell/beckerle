@@ -1,0 +1,15 @@
+o=len(MTLList)
+p=len(NEList)
+correlationArray=np.zeros((o,p))
+for x in range(o):
+    for y in range(o,o+p):
+        if y!=x:
+            correlationArray[x,y-o]=scipy.stats.spearmanr(nodesArray[x],nodesArray[y])[0]
+
+#sns.heatmap(correlationArray,xticklabels=(NEList),yticklabels=(MTLList))
+a2 = correlationArray[np.triu_indices_from(correlationArray,k=1)]
+print(np.median(a2))
+print(np.std(a2))
+#ax = sns.boxplot(data=a2)
+#ax.set(ylim=(.6,1))
+#ax = sns.swarmplot(data=a2, color=".25")
