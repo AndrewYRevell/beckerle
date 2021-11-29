@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import random
 from scipy import stats
 from scipy.integrate import odeint
-
+T=[36,37,38,39,40,41,54,55,78,79,80,81,82,83,84,85,86,87,88,89]
 col = list(range(2,118))
 C = np.loadtxt("ctrl16.txt", skiprows=2,usecols=col)
 #%% Preprocess connectivity matrices
@@ -67,8 +67,49 @@ for t in range(1, time_steps):
         
             
         neighbor_sum_distribution[t,i] = neighbors_sum/strength
-        
-        
+"""        
+        for L in range(90,95):
+        if node_state[L, T[0]] == 1:
+            print("HC, Left")
+        if node_state[L, T[1]] == 1:
+            print("HC, Right")
+        if node_state[L, T[2]] == 1:
+            print("PHC, Left")
+        if node_state[L, T[3]] == 1:
+            print("PHC, Right")
+        if node_state[L, T[4]] == 1:
+            print("Amygdala, Left")
+        if node_state[L, T[5]] == 1:
+            print("Amygdala, Right")
+        if node_state[L, T[6]] == 1:
+            print("FUSI, Left")
+        if node_state[L, T[7]] == 1:
+            print("FUSI, Right")
+        if node_state[L, T[8]] == 1:
+            print("HES, Left")
+        if node_state[L, T[9]] == 1:
+            print("HES, Right")
+        if node_state[L, T[10]] == 1:
+            print("T1, Left")
+        if node_state[L, T[11]] == 1:
+            print("T1, Right")
+        if node_state[L, T[12]] == 1:
+            print("T1P, Left")
+        if node_state[L, T[13]] == 1:
+            print("T1P, Right")
+        if node_state[L, T[14]] == 1:
+            print("T2, Left")
+        if node_state[L, T[15]] == 1:
+            print("T2, Right")
+        if node_state[L, T[16]] == 1:
+            print("T2P, Left")
+        if node_state[L, T[17]] == 1:
+            print("T2P, Right")
+        if node_state[L, T[18]] == 1:
+            print("T3, Left")
+        if node_state[L, T[19]] == 1:
+            print("T3, Right")    
+"""
 print(R)
 print(I)
 print(node_state[0,:])
