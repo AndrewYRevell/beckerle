@@ -12,7 +12,7 @@ nodesArray=[]
 ctrlList=[]
 checkMap=np.zeros(shape=(100,117))
 T=[36,37,38,39,40,41]
-for a in range (4,5):
+for a in range (4,10):
     ctrlList.append(a)
     file = f"C{a}BNA.txt"
     C = np.loadtxt(file, skiprows=2, usecols = (col))
