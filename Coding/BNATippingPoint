@@ -35,7 +35,7 @@ for a in range (4,5):
 
 
 #parameters
-    threshold = .02
+    threshold = .015
 
     seed = 215 #ROI number where activity starts
     time_steps = 10 #number of time steps before termination of simulation
