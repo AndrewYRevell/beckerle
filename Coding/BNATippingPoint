@@ -99,7 +99,8 @@ for a in range (4,5):
             P=np.count_nonzero(node_state[time_steps-1,:])
             print(P)
         if P<=1:
+            print(a)
             break
 
-print(threshold)
+#print(threshold)
 #print(node_state[:,T[:]])
