@@ -71,7 +71,7 @@ for a in range (4,5):
         #print(node_state[2,:])
         #print(np.all(node_state[time_steps-1,:]==1)) #check if all nodes are fully active
         checkMap=b
-
+    sns.heatmap(checkMap)
     for P in range(2,247):
         threshold=threshold+.0001
         print(threshold)
@@ -100,6 +100,6 @@ for a in range (4,5):
             print(P)
         if P<=1:
             break
-sns.heatmap(checkMap)
+
 print(threshold)
 #print(node_state[:,T[:]])
