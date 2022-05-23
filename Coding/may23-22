@@ -1,0 +1,124 @@
+# -*- coding: utf-8 -*-
+import os
+from scipy.io import loadmat
+import numpy as np
+import copy
+import scipy
+import seaborn as sns
+import matplotlib.pyplot as plt
+import random
+col = list(range(2,248))
+
+C = np.loadtxt("TPC.csv")
+NE = np.loadtxt("TableNE.csv")
+MTL = np.loadtxt("TableMTL.csv")
+
+
+"""
+box1=np.zeros(shape=(4,4))
+box2=np.zeros(shape=(4,4))
+box3=np.zeros(shape=(4,4))
+for i in range(4):
+    for j in range(4):
+        if i!=j:
+            box1[i,j]=scipy.stats.spearmanr(MTL[i],MTL[j])[1]
+            box2[i,j]=scipy.stats.spearmanr(NE[i],NE[j])[1]
+            box3[i,j]=scipy.stats.spearmanr(C[i],C[j])[1]
+"""
+"""
+sns.distplot(C[1],kde=1)
+sns.distplot(NE[1],kde=1)
+sns.distplot(MTL[1],kde=1)
+"""
+"""
+#sns.heatmap(C,cmap="coolwarm",vmax=0.16)
+sns.heatmap(NE,cmap="coolwarm",vmax=0.16)
+#sns.heatmap(MTL,cmap="coolwarm",vmax=0.16)
+"""
+sns.violinplot(C)
+sns.swarmplot(C)
+#sns.violinplot(NE)
+#sns.violinplot(MTL)
+"""
+#sns.distplot(C)
+#sns.distplot(NE[NE<.15])
+#sns.distplot(MTL[MTL<.15])
+
+print(np.median(C[range(214,218)]))
+print(np.std(C[range(214,218)]))
+print(np.median(NE[range(214,218)]))
+print(np.std(NE[range(214,218)]))
+print(np.median(MTL[range(214,218)]))
+print(np.std(MTL[range(214,218)]))
+
+
+MTLList=[89,121,270,278,320,341,365,380,420,445,449,450,490,508,522,572,595,596,619,646,648,669,679]
+ctrlList=[288,289,290,291,292,297,505,600,602,603,604,615,682,683]
+NEList=[139,194,309,440,448,459,520,529,566]
+tableMTL=np.zeros(shape=(4,len(MTLList)))
+tableNE=np.zeros(shape=(4,len(NEList)))
+tableC=np.zeros(shape=(4,len(ctrlList)))
+ 
+for a in range(23):
+    file = f"sub-RID0{MTLList[a]}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+    HC = np.loadtxt(file, skiprows=2, usecols = (col))
+    tableMTL[0,a]=(np.sum((HC[214],HC[215],HC[216],HC[217])))
+    tableMTL[1,a]=(np.sum((HC[216,217],HC[216,215],HC[214,217],HC[214,215])))
+    tableMTL[2,a]=(np.max(MTL[:,a]))
+    tableMTL[3,a]=(np.max(MTL[range(214,218),a]))
+    r=np.max(MTL[:,a])
+    
+    q=np.where(r==MTL[:,a])[0]
+    print(q)
+    
+    s=np.max(MTL[-r :,a])
+    t=np.max(MTL[-s :,a])
+    print(r,s,t)
+    
+
+for a in range(9):
+    file = f"sub-RID0{NEList[a]}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+    HC = np.loadtxt(file, skiprows=2, usecols = (col))
+    tableNE[0,a]=(np.sum((HC[214],HC[215],HC[216],HC[217])))
+    tableNE[1,a]=(np.sum((HC[216,217],HC[216,215],HC[214,217],HC[214,215])))
+    tableNE[2,a]=(np.max(NE[:,a]))
+    tableNE[3,a]=(np.max(NE[range(214,218),a]))
+
+for a in range(14):
+    file = f"sub-RID0{ctrlList[a]}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+    HC = np.loadtxt(file, skiprows=2, usecols = (col))
+    tableC[0,a]=(np.sum((HC[214],HC[215],HC[216],HC[217])))
+    tableC[1,a]=(np.sum((HC[216,217],HC[216,215],HC[214,217],HC[214,215])))
+    tableC[2,a]=(np.max(C[:,a]))
+    tableC[3,a]=(np.max(C[range(214,218),a]))
+"""
+"""
+NE[1,1]
+NE[1,5]
+NE[1,7]
+
+
+POGGIE=[]
+
+
+POGGIE.extend(ctrlList)
+POGGIE.extend(MTLList)
+POGGIE.extend(NEList)
+
+print("CTRL")
+for a in ctrlList:
+    file = f"sub-RID0{a}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+    C = np.loadtxt(file, skiprows=2, usecols = (col))
+    print((np.sum((C[216,217],C[216,215],C[214,217],C[214,215]))))
+print("NTLE")
+for a in NEList:
+    file = f"sub-RID0{a}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+    C = np.loadtxt(file, skiprows=2, usecols = (col))
+    print((np.sum((C[216,217],C[216,215],C[214,217],C[214,215]))))
+print("MTL")
+for a in MTLList:
+    file = f"sub-RID0{a}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+    C = np.loadtxt(file, skiprows=2, usecols = (col))
+    print((np.sum((C[216,217],C[216,215],C[214,217],C[214,215]))))
+"""
+
