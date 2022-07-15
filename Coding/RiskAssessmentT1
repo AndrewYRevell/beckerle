@@ -1,0 +1,205 @@
+#%%RISK ASSESSMENT
+QQ=[]
+for pat in range(0,len(ctrlList)):
+    riskC[0,pat]=ctrlList[pat]
+    
+    for a in range(0,246):
+        
+
+        file = f"sub-RID0{ctrlList[pat]}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+        
+        C = np.loadtxt(file, skiprows=2, usecols = (col))
+        #log normalizing
+        C[np.where(C == 0)] = 1
+        C = np.log10(C)
+        C = C/np.max(C)
+        #sns.heatmap(C)
+        
+        #Thresholding
+        threshold = 0.2 #bottom X percent of edge weights are eliminated
+        C_thresh = copy.deepcopy(C)
+        number_positive_edges = len(np.where(C > 0)[0])
+        cutoff = int(np.round(number_positive_edges*threshold))
+        positive_edges = C[np.where(C > 0)]
+        cutoff_threshold = np.sort(positive_edges)[cutoff]
+        C_thresh[np.where(C_thresh < cutoff_threshold)] = 0
+        len(np.where(C_thresh > 0)[0])
+        
+        
+        #parameters
+        seed=a
+        threshold = ctrl[seed,pat]-.001
+        #seed = 36 #ROI number where activity starts
+        time_steps = 3 #number of time steps before termination of simulation
+        N = len(C_thresh) #number of nodes
+        node_state = np.zeros(shape = (time_steps, N))
+        node_state[0, seed] = 1 #make seed active
+        neighbor_sum_distribution = np.zeros(shape = (time_steps, N))
+        
+        for t in range(1, time_steps):
+            #print(t)
+            for i in range(N): #loop thru all nodes
+                #find neighbors of node i
+                previous_state = node_state[t-1,i]
+                neighbors = np.where(C_thresh[i,:] > 0)
+                neighbors_weight = C_thresh[i,neighbors] 
+                neighbors_state = node_state[t-1, neighbors]
+                neighbors_sum = np.sum(neighbors_weight * neighbors_state)
+                strength = np.sum(neighbors_weight)
+                if neighbors_sum >= threshold*strength: #if sum is greater than threshold, make that node active
+                    node_state[t, i] = 1
+                if neighbors_sum < threshold*strength:
+                    node_state[t, i] = 0
+                if previous_state == 1:
+                    node_state[t, i] = 1
+                #neighbor_sum_distribution[t,i] = neighbors_sum/strength
+        b=node_state[:,:]
+        d=node_state.flatten() #time_steps x nodes (116)?
+        nodesArray.append(d)
+        #print(node_state[24,:])
+        P = np.count_nonzero(node_state[1,:])
+        QQ.extend((np.where(b[1,:]==1)))
+        
+        risk=list(np.concatenate(QQ).flat)
+    ModeNode=scipy.stats.mode(risk)
+    riskC[1,pat]=ModeNode[0]
+
+
+QQ=[]
+
+for pat in range(0,len(MTLList)):
+    riskMTL[0,pat]=MTLList[pat]
+    for a in range(0,246):
+        
+
+        file = f"sub-RID0{MTLList[pat]}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+        
+        C = np.loadtxt(file, skiprows=2, usecols = (col))
+        #log normalizing
+        C[np.where(C == 0)] = 1
+        C = np.log10(C)
+        C = C/np.max(C)
+        #sns.heatmap(C)
+        
+        #Thresholding
+        threshold = 0.2 #bottom X percent of edge weights are eliminated
+        C_thresh = copy.deepcopy(C)
+        number_positive_edges = len(np.where(C > 0)[0])
+        cutoff = int(np.round(number_positive_edges*threshold))
+        positive_edges = C[np.where(C > 0)]
+        cutoff_threshold = np.sort(positive_edges)[cutoff]
+        C_thresh[np.where(C_thresh < cutoff_threshold)] = 0
+        len(np.where(C_thresh > 0)[0])
+        
+        
+        #parameters
+        seed=a
+        threshold = MTL[seed,pat]-.001
+        #seed = 36 #ROI number where activity starts
+        time_steps = 3 #number of time steps before termination of simulation
+        N = len(C_thresh) #number of nodes
+        node_state = np.zeros(shape = (time_steps, N))
+        node_state[0, seed] = 1 #make seed active
+        neighbor_sum_distribution = np.zeros(shape = (time_steps, N))
+        
+        for t in range(1, time_steps):
+            #print(t)
+            for i in range(N): #loop thru all nodes
+                #find neighbors of node i
+                previous_state = node_state[t-1,i]
+                neighbors = np.where(C_thresh[i,:] > 0)
+                neighbors_weight = C_thresh[i,neighbors] 
+                neighbors_state = node_state[t-1, neighbors]
+                neighbors_sum = np.sum(neighbors_weight * neighbors_state)
+                strength = np.sum(neighbors_weight)
+                if neighbors_sum >= threshold*strength: #if sum is greater than threshold, make that node active
+                    node_state[t, i] = 1
+                if neighbors_sum < threshold*strength:
+                    node_state[t, i] = 0
+                if previous_state == 1:
+                    node_state[t, i] = 1
+                #neighbor_sum_distribution[t,i] = neighbors_sum/strength
+        b=node_state[:,:]
+        d=node_state.flatten() #time_steps x nodes (116)?
+        nodesArray.append(d)
+        #print(node_state[24,:])
+        P = np.count_nonzero(node_state[1,:])
+        QQ.extend((np.where(b[1,:]==1)))
+        
+        risk=list(np.concatenate(QQ).flat)
+    ModeNode=scipy.stats.mode(risk)
+    riskMTL[1,pat]=ModeNode[0]
+
+
+
+QQ=[]
+
+for pat in range(0,len(NEList)):
+    riskNE[0,pat]=NEList[pat]
+    for a in range(0,246):
+        
+
+        file = f"sub-RID0{NEList[pat]}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+        
+        C = np.loadtxt(file, skiprows=2, usecols = (col))
+        #log normalizing
+        C[np.where(C == 0)] = 1
+        C = np.log10(C)
+        C = C/np.max(C)
+        #sns.heatmap(C)
+        
+        #Thresholding
+        threshold = 0.2 #bottom X percent of edge weights are eliminated
+        C_thresh = copy.deepcopy(C)
+        number_positive_edges = len(np.where(C > 0)[0])
+        cutoff = int(np.round(number_positive_edges*threshold))
+        positive_edges = C[np.where(C > 0)]
+        cutoff_threshold = np.sort(positive_edges)[cutoff]
+        C_thresh[np.where(C_thresh < cutoff_threshold)] = 0
+        len(np.where(C_thresh > 0)[0])
+        
+        
+        #parameters
+        seed=a
+        threshold = NE[seed,pat]-.001
+        #seed = 36 #ROI number where activity starts
+        time_steps = 3 #number of time steps before termination of simulation
+        N = len(C_thresh) #number of nodes
+        node_state = np.zeros(shape = (time_steps, N))
+        node_state[0, seed] = 1 #make seed active
+        neighbor_sum_distribution = np.zeros(shape = (time_steps, N))
+        
+        for t in range(1, time_steps):
+            #print(t)
+            for i in range(N): #loop thru all nodes
+                #find neighbors of node i
+                previous_state = node_state[t-1,i]
+                neighbors = np.where(C_thresh[i,:] > 0)
+                neighbors_weight = C_thresh[i,neighbors] 
+                neighbors_state = node_state[t-1, neighbors]
+                neighbors_sum = np.sum(neighbors_weight * neighbors_state)
+                strength = np.sum(neighbors_weight)
+                if neighbors_sum >= threshold*strength: #if sum is greater than threshold, make that node active
+                    node_state[t, i] = 1
+                if neighbors_sum < threshold*strength:
+                    node_state[t, i] = 0
+                if previous_state == 1:
+                    node_state[t, i] = 1
+                #neighbor_sum_distribution[t,i] = neighbors_sum/strength
+        b=node_state[:,:]
+        d=node_state.flatten() #time_steps x nodes (116)?
+        nodesArray.append(d)
+        #print(node_state[24,:])
+        P = np.count_nonzero(node_state[1,:])
+        QQ.extend((np.where(b[1,:]==1)))
+        
+        risk=list(np.concatenate(QQ).flat)
+    ModeNode=scipy.stats.mode(risk)
+    riskNE[1,pat]=ModeNode[0]
+
+    #print(P/246)
+    #print(nodesArray)
+    
+np.savetxt("AALriskMTL.csv",riskMTL)
+np.savetxt("AALriskNE.csv",riskNE)
+np.savetxt("AALriskC.csv",riskC)
