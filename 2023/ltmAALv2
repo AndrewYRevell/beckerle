@@ -80,12 +80,12 @@ for a in NEList:
             #neighbor_sum_distribution[t,i] = neighbors_sum/strength
                 
         P=np.count_nonzero(node_state[time_steps-1,:])
-        b=node_state[1,:]
-        d=node_state.flatten()
-        nodesArray.append(b)
+    b=node_state[1,:]
+    #d=node_state.flatten()
+    nodesArray.append(b)
         #print(node_state[2,:])
         #print(np.all(node_state[time_steps-1,:]==1)) #check if all nodes are fully active
-        checkMap=b
+    #checkMap=b
     #sns.heatmap(checkMap)
 
 
@@ -154,9 +154,9 @@ for a in MTLList:
             #neighbor_sum_distribution[t,i] = neighbors_sum/strength
                 
         P=np.count_nonzero(node_state[time_steps-1,:])
-        b=node_state[1,:]
-        d=node_state.flatten()
-        nodesArray.append(b)
+    b=node_state[1,:]
+    #d=node_state.flatten()
+    nodesArray.append(b)
         #print(node_state[2,:])
         #print(np.all(node_state[time_steps-1,:]==1)) #check if all nodes are fully active
         
@@ -224,10 +224,10 @@ for a in ctrlList:
                 node_state[t, i] = 1
             #neighbor_sum_distribution[t,i] = neighbors_sum/strength
                 
-        P=np.count_nonzero(node_state[time_steps-1,:])
-        b=node_state[1,:]
-        #d=node_state.flatten()
-        nodesArray.append(b)
+    P=np.count_nonzero(node_state[time_steps-1,:])
+    b=node_state[1,:]
+    #d=node_state.flatten()
+    nodesArray.append(b)
         #print(node_state[2,:])
         #print(np.all(node_state[time_steps-1,:]==1)) #check if all nodes are fully active
         #checkMap=b
@@ -242,3 +242,4 @@ for x in range(n):
             correlationArray[x,y]=scipy.stats.spearmanr(nodesArray[x],nodesArray[y])[0]
 a2 = correlationArray[np.triu_indices_from(correlationArray,k=1)]
 sns.heatmap(correlationArray, square=True)
+#np.median(a2)
