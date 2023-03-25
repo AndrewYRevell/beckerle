@@ -86,7 +86,8 @@ for a in NEList:
         #print(node_state[2,:])
         #print(np.all(node_state[time_steps-1,:]==1)) #check if all nodes are fully active
     #checkMap=b
-    #sns.heatmap(checkMap)
+    
+    
 
 
 #print(threshold)
@@ -241,5 +242,20 @@ for x in range(n):
         if y!=x:
             correlationArray[x,y]=scipy.stats.spearmanr(nodesArray[x],nodesArray[y])[0]
 a2 = correlationArray[np.triu_indices_from(correlationArray,k=1)]
-sns.heatmap(correlationArray, square=True)
+sns.heatmap(correlationArray, square=True,xticklabels="",yticklabels="")
 #np.median(a2)
+#%%
+#NE %ages
+for x in range(9):
+    P=np.count_nonzero(nodesArray[x])
+    print(P/120)
+"""
+#MTL%ages
+for x in range(9,32):
+    P=np.count_nonzero(nodesArray[x])
+    print(P/120)
+#C%ages
+for x in range(32,46):
+    P=np.count_nonzero(nodesArray[x])
+    print(P/120)
+"""
