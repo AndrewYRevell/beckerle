@@ -1,0 +1,163 @@
+# -*- coding: utf-8 -*-
+import os
+from scipy.io import loadmat
+import numpy as np
+import copy
+import scipy
+import seaborn as sns
+import matplotlib.pyplot as plt
+import random
+MTLList=[89,121,270,278,320,341,365,380,420,445,449,450,490,508,522,572,595,596,619,646,648,669,679]
+ctrlList=[288,289,290,291,292,297,505,600,602,603,604,615,682,683]
+NEList=[139,194,309,440,448,459,520,529,566]
+
+C = np.loadtxt("aal2C.csv")
+NE = np.loadtxt("aal2NE.csv")
+MTL = np.loadtxt("aal2MTL.csv")
+
+Cmed=np.zeros((1,120))
+NEmed=np.zeros((1,120))
+MTLmed=np.zeros((1,120))
+
+for x in range(120):
+    
+    Cmed[0,x]=np.median(C[x])
+    
+for x in range(120):
+    NEmed[0,x]=np.median(NE[x])
+for x in range(120):
+    MTLmed[0,x]=np.median(MTL[x])
+
+#sns.violinplot(MTLmed,color="red")
+#sns.violinplot(NEmed,color="green")
+#sns.violinplot(Cmed,color=("blue"))
+MTLcontrast=np.zeros((len(MTLList),120))
+NEcontrast=np.zeros((len(NEList),120))
+Ccontrast=np.zeros((len(ctrlList),120))
+for a in range(len(MTLList)):
+    for x in range(120):
+        contrast=MTL[x,a]-MTLmed[0,x]
+        MTLcontrast[a,x]=contrast
+        
+NEcontrast=np.zeros((len(NEList),120))
+for a in range(len(NEList)):
+    for x in range(120):
+        contrast=NE[x,a]-NEmed[0,x]
+        NEcontrast[a,x]=contrast
+        
+Ccontrast=np.zeros((len(ctrlList),120))
+for a in range(len(ctrlList)):
+    for x in range(120):
+        contrast=C[x,a]-Cmed[0,x]
+        Ccontrast[a,x]=contrast
+"""
+C = np.loadtxt("AAL2riskC.csv")
+NE = np.loadtxt("AAL2riskNE.csv")
+MTL = np.loadtxt("AAL2riskMTL.csv")
+"""
+
+box1=np.zeros(shape=(120,120))
+box2=np.zeros(shape=(120,120))
+box3=np.zeros(shape=(120,120))
+for i in range(120):
+    for j in range(120):
+        if i!=j:
+            box1[i,j]=scipy.stats.spearmanr(MTLmed[0,i],NEmed[0,j])[1]
+            box2[i,j]=scipy.stats.spearmanr(NE[i],NE[j])[1]
+            box3[i,j]=scipy.stats.spearmanr(C[i],C[j])[1]
+"""
+sns.histplot(MTL[1],binwidth=1,color="blue")
+sns.histplot(C[1],binwidth=1,color="green")
+sns.histplot(NE[1],binwidth=1,color="red")
+
+#sns.heatmap(C,cmap="coolwarm",vmax=0.16)
+#sns.heatmap(NE,cmap="coolwarm",vmax=0.16)
+#sns.heatmap(MTL,cmap="coolwarm",vmax=0.16)
+
+sns.violinplot(MTL,color="red")
+
+#sns.swarmplot(C)
+sns.violinplot(NE,color="green")
+sns.violinplot(C,color=("blue"))
+
+
+#sns.displot(C[1],)
+#sns.distplot(NE[NE<.15])
+#sns.distplot(MTL[MTL<.15])
+
+print(np.median(C[range(214,218)]))
+print(np.std(C[range(214,218)]))
+print(np.median(NE[range(214,218)]))
+print(np.std(NE[range(214,218)]))
+print(np.median(MTL[range(214,218)]))
+print(np.std(MTL[range(214,218)]))
+
+"
+
+tableMTL=np.zeros(shape=(4,len(MTLList)))
+tableNE=np.zeros(shape=(4,len(NEList)))
+tableC=np.zeros(shape=(4,len(ctrlList)))
+ 
+for a in range(23):
+    file = f"sub-RID0{MTLList[a]}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+    HC = np.loadtxt(file, skiprows=2, usecols = (col))
+    tableMTL[0,a]=(np.sum((HC[214],HC[215],HC[216],HC[217])))
+    tableMTL[1,a]=(np.sum((HC[216,217],HC[216,215],HC[214,217],HC[214,215])))
+    tableMTL[2,a]=(np.max(MTL[:,a]))
+    tableMTL[3,a]=(np.max(MTL[range(214,218),a]))
+    r=np.max(MTL[:,a])
+    
+    q=np.where(r==MTL[:,a])[0]
+    print(q)
+    
+    s=np.max(MTL[-r :,a])
+    t=np.max(MTL[-s :,a])
+    print(r,s,t)
+    
+
+for a in range(9):
+    file = f"sub-RID0{NEList[a]}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+    HC = np.loadtxt(file, skiprows=2, usecols = (col))
+    tableNE[0,a]=(np.sum((HC[214],HC[215],HC[216],HC[217])))
+    tableNE[1,a]=(np.sum((HC[216,217],HC[216,215],HC[214,217],HC[214,215])))
+    tableNE[2,a]=(np.max(NE[:,a]))
+    tableNE[3,a]=(np.max(NE[range(214,218),a]))
+
+for a in range(14):
+    file = f"sub-RID0{ctrlList[a]}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+    HC = np.loadtxt(file, skiprows=2, usecols = (col))
+    tableC[0,a]=(np.sum((HC[214],HC[215],HC[216],HC[217])))
+    tableC[1,a]=(np.sum((HC[216,217],HC[216,215],HC[214,217],HC[214,215])))
+    tableC[2,a]=(np.max(C[:,a]))
+    tableC[3,a]=(np.max(C[range(214,218),a]))
+
+
+NE[1,1]
+NE[1,5]
+NE[1,7]
+
+
+POGGIE=[]
+
+
+POGGIE.extend(ctrlList)
+POGGIE.extend(MTLList)
+POGGIE.extend(NEList)
+
+print("CTRL")
+for a in ctrlList:
+    file = f"sub-RID0{a}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+    C = np.loadtxt(file, skiprows=2, usecols = (col))
+    print((np.sum((C[216,217],C[216,215],C[214,217],C[214,215]))))
+print("NTLE")
+for a in NEList:
+    file = f"sub-RID0{a}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+    C = np.loadtxt(file, skiprows=2, usecols = (col))
+    print((np.sum((C[216,217],C[216,215],C[214,217],C[214,215]))))
+print("MTL")
+for a in MTLList:
+    file = f"sub-RID0{a}.BN_Atlas_246_1mm.count.pass.connectogram.txt"
+    C = np.loadtxt(file, skiprows=2, usecols = (col))
+    print((np.sum((C[216,217],C[216,215],C[214,217],C[214,215]))))
+"""
+
